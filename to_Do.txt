@@ -1,0 +1,54 @@
+Tareas y Pasos Principales
+Implementación del Bloqueo de Exclusión Mutua Distribuido
+
+Tu objetivo es crear un bloqueo distribuido que permita que varios "trabajadores" (workers) sincronicen el acceso a una sección crítica.
+Implementarás tres versiones del bloqueo:
+Versión "deadlock prone" (propensa a bloqueos).
+
+Versión "unfair" (injusta).
+
+Versión con "Lamport clocks" (utilizando relojes lógicos de Lamport).
+
+Requisito previo: Familiarízate con el algoritmo de exclusión mutua de Ricart y Agrawala y con el funcionamiento de los relojes de Lamport para gestionar la sincronización en sistemas distribuidos.
+
+Arquitectura del Sistema
+
+En el escenario planteado, tienes un conjunto de "trabajadores" que deben sincronizarse para acceder a una sección crítica. Estos trabajadores decidirán aleatoriamente cuándo solicitar el bloqueo y, una vez adquirido, lo mantendrán durante un breve periodo antes de liberarlo.
+Cada trabajador tendrá:
+Una instancia de bloqueo.
+Estadísticas del tiempo que le toma adquirir el bloqueo, que se presentarán al final de cada prueba.
+Implementación del Trabajador (Worker)
+
+Cada trabajador se implementa en un módulo llamado worker.
+Los trabajadores se inician con parámetros específicos (nombre, instancia de bloqueo, tiempo de sueño y tiempo de trabajo) y compiten por un bloqueo. El script también permite ajustar estos tiempos para simular diferentes niveles de congestión.
+El trabajador registra el tiempo de espera y el tiempo que tarda en adquirir el bloqueo, almacena esta información y la usa para calcular estadísticas.
+Métodos y funciones en worker:
+start: Inicia al trabajador.
+init: Configura el trabajador y conecta el GUI.
+acquire: Solicita el bloqueo y gestiona el tiempo de espera.
+terminate: Finaliza el trabajador y muestra estadísticas.
+Implementación del Bloqueo (Lock)
+
+Crearás tres módulos de bloqueo diferentes: lock1, lock2, y lock3.
+Detalles de cada módulo:
+lock1: Implementación básica del bloqueo sin prevención de interbloqueo. Evita que varios trabajadores entren a la sección crítica al mismo tiempo, pero no gestiona conflictos o situaciones complejas.
+lock2: Implementación con una prioridad basada en el identificador de cada instancia de bloqueo. Esto ayuda a resolver algunos conflictos al permitir que las instancias con mayor prioridad accedan primero.
+lock3: Implementación usando relojes de Lamport para garantizar que los trabajadores accedan a la sección crítica en orden de solicitud (lógica temporal).
+Pruebas y Experimentos
+
+Una vez implementadas las tres versiones de bloqueo, debes realizar pruebas para comparar su rendimiento y efectividad.
+Prueba cada versión con diferentes tiempos de espera y de trabajo (Sleep y Work) para evaluar cómo responden a diferentes grados de contención.
+Experimentos adicionales:
+Ejecuta cada par de worker-lock en máquinas diferentes para probar el sistema en un entorno verdaderamente distribuido.
+Aumenta la probabilidad de conflicto y observa el comportamiento de cada implementación de bloqueo.
+Preguntas Abiertas
+
+Reflexiona sobre el comportamiento del bloqueo en situaciones de alto conflicto.
+Justifica cómo el código de lock2 asegura que solo un proceso esté en la sección crítica en un momento dado y evalúa cualquier inconveniente de este diseño.
+Para lock3, analiza si es posible que un trabajador obtenga acceso a la sección crítica antes de otro trabajador que hizo una solicitud previamente, considerando el orden real de los eventos.
+Resumen de lo que necesitas hacer
+Implementar tres versiones del bloqueo distribuido: lock1, lock2, y lock3.
+Crear y configurar los trabajadores para que compitan por el bloqueo y generen estadísticas de acceso.
+Realizar pruebas con diferentes configuraciones de tiempo y contención, comparando el comportamiento de las tres versiones.
+Responder preguntas abiertas relacionadas con el diseño y la efectividad de cada implementación del bloqueo.
+Este proyecto explora conceptos avanzados de concurrencia y exclusión mutua en sistemas distribuidos, así que asegúrate de revisar la teoría sobre los algoritmos y relojes mencionados antes de comenzar con el desarrollo.
